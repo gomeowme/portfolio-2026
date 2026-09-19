@@ -7,7 +7,6 @@ const Engine = Matter.Engine,
 const engine = Engine.create();
 const world = engine.world;
 
-// 안내 문구를 클릭으로 유도하도록 살짝 바꿨습니다.
 const introText = "Hello! I am a creative designer based in Seoul. Welcome to my interactive portfolio. In the hushed glow of summer nights, a lonely dreamer drifts through life on the fringes... Click anywhere on the screen to break the layout!";
 const textBox = document.getElementById('text-box');
 
@@ -47,9 +46,9 @@ function breakText() {
             rect.width, 
             rect.height, 
             {
-                restitution: 0.5, // 0.8 -> 0.5 (탱탱볼처럼 튀는 느낌을 줄임)
+                restitution: 0.5, 
                 friction: 0.2,    
-                frictionAir: 0.05 // 0.02 -> 0.05 (공기 저항을 높여서 우주/물 속처럼 부드럽고 천천히 날아가게)
+                frictionAir: 0.05 
             }
         );
         
@@ -80,10 +79,8 @@ function update() {
 
 Runner.run(Runner.create(), engine);
 
-// 1. 화면의 아무 곳이나 클릭해야만 무너지기 시작함!
 document.addEventListener('click', breakText);
 
-// 2. 마우스를 움직일 때의 반발력(밀어내는 힘) 대폭 감소
 document.addEventListener('mousemove', (event) => {
     if (hasFallen) {
         const mouseX = event.clientX;
@@ -95,12 +92,13 @@ document.addEventListener('mousemove', (event) => {
             const dy = body.position.y - mouseY;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
-            // 마우스 커서 반경 150px (조금 더 가까이 가야 반응)
-            if (distance < 150) {
-                const forceMagnitude = 0.003; // 힘을 대폭 줄임 (0.03 -> 0.003) 너무 과격하지 않게
+            // 1. 큰 모니터 환경을 위해 마우스가 반응하는 반경을 늘림 (150 -> 250)
+            if (distance < 250) {
+                // 2. 글자의 '실제 무게(mass)'에 비례해서 밀어내는 힘을 주도록 수정!
+                const forceMagnitude = 0.001 * body.mass; 
                 Matter.Body.applyForce(body, body.position, {
                     x: (dx / distance) * forceMagnitude,
-                    y: (dy / distance) * forceMagnitude - 0.005 // 살짝만 뜨도록 수정
+                    y: (dy / distance) * forceMagnitude - (0.001 * body.mass) // 위로 뜨는 힘도 무게에 비례
                 });
             }
         });
