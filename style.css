@@ -1,0 +1,41 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /* 화면 전체를 하얗게(아주 밝은 회색) 변경 */
+    background-color: #f8f8f8; 
+    color: #111;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    overflow: hidden; 
+}
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-box {
+    /* 하얀 박스를 없애고 화면 전체를 차지하게 변경 */
+    width: 90vw;
+    height: 90vh;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center; /* 글이 화면 중앙에 모이게 */
+    justify-content: center;
+    gap: 15px 12px; /* 단어 간격 */
+}
+
+.word {
+    display: inline-block;
+    /* 화면 크기에 맞춰 글자 크기가 커지도록 설정 */
+    font-size: 3vw; 
+    font-weight: bold;
+    user-select: none;
+    will-change: transform;
+}
