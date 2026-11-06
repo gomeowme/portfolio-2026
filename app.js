@@ -3,6 +3,7 @@ const menuPanel = document.getElementById('menu-panel');
 const motionIntro = document.querySelector('.motion-intro');
 const imageOrbit = document.getElementById('image-orbit');
 const introPhotos = [...document.querySelectorAll('.intro-photo')];
+const customCursor = document.getElementById('custom-cursor');
 
 function closeMenu() {
     menuPanel.hidden = true;
@@ -60,6 +61,40 @@ function updatePageView() {
 
 window.addEventListener('hashchange', updatePageView);
 updatePageView();
+
+if (customCursor && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.body.classList.add('has-custom-cursor');
+    let hoveredHeaderItem = null;
+
+    document.addEventListener('pointermove', (event) => {
+        if (event.pointerType !== 'mouse') return;
+        customCursor.style.left = `${event.clientX}px`;
+        customCursor.style.top = `${event.clientY}px`;
+        customCursor.classList.add('is-visible');
+        customCursor.classList.toggle('is-hovering', Boolean(event.target.closest('a, button')));
+
+        const nextHeaderItem = event.target.closest('.site-header a, .menu-button');
+        if (nextHeaderItem !== hoveredHeaderItem) {
+            hoveredHeaderItem?.classList.remove('pointer-hover');
+            nextHeaderItem?.classList.add('pointer-hover');
+            hoveredHeaderItem = nextHeaderItem;
+        }
+    });
+
+    document.addEventListener('pointerdown', (event) => {
+        if (event.pointerType === 'mouse') customCursor.classList.add('is-pressed');
+    });
+
+    document.addEventListener('pointerup', () => {
+        customCursor.classList.remove('is-pressed');
+    });
+
+    document.addEventListener('pointerleave', () => {
+        customCursor.classList.remove('is-visible', 'is-hovering', 'is-pressed');
+        hoveredHeaderItem?.classList.remove('pointer-hover');
+        hoveredHeaderItem = null;
+    });
+}
 
 if (motionIntro && imageOrbit && introPhotos.length > 0) {
     let isDragging = false;
