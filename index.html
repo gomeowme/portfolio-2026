@@ -1,23 +1,113 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Intro</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="서울을 기반으로 활동하는 크리에이티브 디자이너 은서 최의 포트폴리오입니다.">
+    <title>Projects — eunseochoi</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    
-    <div class="container">
-        <!-- 흰색 배경 박스 -->
-        <div class="text-box" id="text-box">
-            <!-- 자바스크립트가 여기에 텍스트를 단어별로 쪼개서 넣을 예정입니다. -->
-        </div>
-    </div>
+<body id="home" class="home-view">
+    <header class="site-header">
+        <a class="wordmark" href="#home" aria-label="eunseochoi 홈">eunseochoi</a>
+        <nav class="site-nav" aria-label="주 메뉴">
+            <a class="active" href="#home" aria-current="page">Home</a>
+            <a href="#projects">Projects</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </nav>
+        <button class="menu-button" id="menu-button" type="button" aria-label="메뉴 열기" aria-controls="menu-panel" aria-expanded="false">
+            <span class="menu-lines" aria-hidden="true"><i></i><i></i></span>
+        </button>
+        <nav class="menu-panel" id="menu-panel" aria-label="전체 메뉴" hidden>
+            <a href="#home">Home</a>
+            <a href="#projects">Projects</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
 
-    <!-- 물리 엔진 라이브러리 (Matter.js) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <section class="motion-intro" aria-label="드래그하여 회전하는 이미지 인트로">
+        <div class="image-orbit" id="image-orbit" role="group" aria-label="드래그하여 회전하는 프로젝트 이미지 자리">
+            <figure class="intro-photo photo-one" data-angle="0" aria-label="프로젝트 이미지 자리 01"><div class="photo-surface"></div></figure>
+            <figure class="intro-photo photo-two" data-angle="60" aria-label="프로젝트 이미지 자리 02"><div class="photo-surface"></div></figure>
+            <figure class="intro-photo photo-three" data-angle="120" aria-label="프로젝트 이미지 자리 03"><div class="photo-surface"></div></figure>
+            <figure class="intro-photo photo-four" data-angle="180" aria-label="프로젝트 이미지 자리 04"><div class="photo-surface"></div></figure>
+            <figure class="intro-photo photo-five" data-angle="240" aria-label="프로젝트 이미지 자리 05"><div class="photo-surface"></div></figure>
+            <figure class="intro-photo photo-six" data-angle="300" aria-label="프로젝트 이미지 자리 06"><div class="photo-surface"></div></figure>
+        </div>
+    </section>
+
+    <main>
+        <section class="projects-section" id="projects" aria-labelledby="projects-heading">
+            <div class="intro">
+                <h2 id="projects-heading">Projects.</h2>
+                <p class="intro-text">서울을 기반으로 활동하며,<br>아이디어를 시각적인 경험으로 만듭니다.</p>
+                <p class="intro-note">(Selected Works)</p>
+            </div>
+
+            <div class="project-grid">
+                <article class="project-card">
+                    <span class="project-number">(01)</span>
+                    <div class="project-visual" role="img" aria-label="프로젝트 01 이미지 자리"><span>IMAGE 01</span></div>
+                    <div class="project-detail"><span>프로젝트 제목 01</span><span class="project-type">카테고리</span></div>
+                </article>
+                <article class="project-card">
+                    <span class="project-number">(02)</span>
+                    <div class="project-visual" role="img" aria-label="프로젝트 02 이미지 자리"><span>IMAGE 02</span></div>
+                    <div class="project-detail"><span>프로젝트 제목 02</span><span class="project-type">카테고리</span></div>
+                </article>
+                <article class="project-card">
+                    <span class="project-number">(03)</span>
+                    <div class="project-visual" role="img" aria-label="프로젝트 03 이미지 자리"><span>IMAGE 03</span></div>
+                    <div class="project-detail"><span>프로젝트 제목 03</span><span class="project-type">카테고리</span></div>
+                </article>
+                <article class="project-card">
+                    <span class="project-number">(04)</span>
+                    <div class="project-visual" role="img" aria-label="프로젝트 04 이미지 자리"><span>IMAGE 04</span></div>
+                    <div class="project-detail"><span>프로젝트 제목 04</span><span class="project-type">카테고리</span></div>
+                </article>
+                <article class="project-card">
+                    <span class="project-number">(05)</span>
+                    <div class="project-visual" role="img" aria-label="프로젝트 05 이미지 자리"><span>IMAGE 05</span></div>
+                    <div class="project-detail"><span>프로젝트 제목 05</span><span class="project-type">카테고리</span></div>
+                </article>
+                <article class="project-card">
+                    <span class="project-number">(06)</span>
+                    <div class="project-visual" role="img" aria-label="프로젝트 06 이미지 자리"><span>IMAGE 06</span></div>
+                    <div class="project-detail"><span>프로젝트 제목 06</span><span class="project-type">카테고리</span></div>
+                </article>
+                <article class="project-card">
+                    <span class="project-number">(07)</span>
+                    <div class="project-visual" role="img" aria-label="프로젝트 07 이미지 자리"><span>IMAGE 07</span></div>
+                    <div class="project-detail"><span>프로젝트 제목 07</span><span class="project-type">카테고리</span></div>
+                </article>
+                <article class="project-card">
+                    <span class="project-number">(08)</span>
+                    <div class="project-visual" role="img" aria-label="프로젝트 08 이미지 자리"><span>IMAGE 08</span></div>
+                    <div class="project-detail"><span>프로젝트 제목 08</span><span class="project-type">카테고리</span></div>
+                </article>
+            </div>
+        </section>
+
+        <section class="info-section" id="about" aria-labelledby="about-heading">
+            <p class="section-label">(About)</p>
+            <h2 id="about-heading">Thoughtful ideas,<br>made visible.</h2>
+            <p class="about-copy">서울을 기반으로 활동하는 크리에이티브 디자이너입니다. 시각 아이덴티티와 디지털 경험을 중심으로 다양한 아이디어를 탐구합니다.</p>
+        </section>
+
+        <section class="contact-section" id="contact" aria-labelledby="contact-heading">
+            <p class="section-label">(Contact)</p>
+            <h2 id="contact-heading">Let’s make<br>something good.</h2>
+            <p class="contact-copy">새로운 프로젝트와 협업 제안은 언제든 환영합니다.</p>
+        </section>
+
+        <footer class="page-bottom">
+            <span>© 2026 eunseochoi</span>
+            <a href="#home">Back to top ↑</a>
+        </footer>
+    </main>
     <script src="app.js"></script>
 </body>
 </html>
-
