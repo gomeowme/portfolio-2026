@@ -415,6 +415,15 @@ h1,
     transition: opacity 180ms ease;
 }
 
+.page-wipe {
+    position: fixed;
+    z-index: 30;
+    inset: 0;
+    background: var(--paper);
+    pointer-events: none;
+    will-change: transform;
+}
+
 .custom-cursor {
     position: fixed;
     z-index: 20;
@@ -465,4 +474,5 @@ h1,
         scroll-behavior: auto !important;
         transition-duration: 0.01ms !important;
     }
+
 }

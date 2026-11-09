@@ -32,7 +32,7 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeMenu();
 });
 
-function updatePageView() {
+function updatePageView({ scroll = true } = {}) {
     const isHome = window.location.hash === '' || window.location.hash === '#home';
     document.body.classList.toggle('home-view', isHome);
     document.body.classList.toggle('project-view', !isHome);
@@ -50,7 +50,12 @@ function updatePageView() {
     if (!isHome) {
         requestAnimationFrame(() => {
             const target = document.getElementById(window.location.hash.slice(1));
-            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (!target) return;
+            if (scroll) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                window.scrollTo(0, 0);
+            }
         });
     } else {
         window.scrollTo(0, 0);
@@ -61,6 +66,37 @@ function updatePageView() {
 
 window.addEventListener('hashchange', updatePageView);
 updatePageView();
+
+let isTransitioning = false;
+
+document.addEventListener('click', async (event) => {
+    const projectsLink = event.target.closest('a[href="#projects"]');
+    if (!projectsLink || !document.body.classList.contains('home-view') || isTransitioning) return;
+
+    event.preventDefault();
+    isTransitioning = true;
+
+    const wipe = document.createElement('div');
+    wipe.className = 'page-wipe';
+    wipe.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(wipe);
+    const transitionDuration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 1 : 520;
+
+    await wipe.animate(
+        [{ transform: 'translateY(100%)' }, { transform: 'translateY(0)' }],
+        { duration: transitionDuration, easing: 'cubic-bezier(0.76, 0, 0.24, 1)', fill: 'forwards' }
+    ).finished;
+
+    window.history.pushState(null, '', '#projects');
+    updatePageView({ scroll: false });
+
+    await wipe.animate(
+        [{ transform: 'translateY(0)' }, { transform: 'translateY(-100%)' }],
+        { duration: transitionDuration, easing: 'cubic-bezier(0.76, 0, 0.24, 1)', fill: 'forwards' }
+    ).finished;
+    wipe.remove();
+    isTransitioning = false;
+});
 
 if (customCursor && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     document.body.classList.add('has-custom-cursor');
