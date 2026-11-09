@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="eunseochoi의 작은 플레이 공간입니다.">
+    <title>Playground — eunseochoi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="playground-page project-view" data-page="playground">
+    <header class="site-header">
+        <a class="wordmark" href="index.html#home" aria-label="eunseochoi 홈으로 이동">eunseochoi</a>
+        <nav class="site-nav" aria-label="주 메뉴">
+            <a href="index.html#home">Home</a>
+            <a href="index.html#projects">Projects</a>
+            <a href="about.html#about">About</a>
+            <a href="contact.html#contact">Contact</a>
+        </nav>
+        <button class="menu-button" id="menu-button" type="button" aria-label="메뉴 열기" aria-controls="menu-panel" aria-expanded="false">
+            <span class="menu-lines" aria-hidden="true"><i></i><i></i></span>
+        </button>
+        <nav class="menu-panel" id="menu-panel" aria-label="전체 메뉴" hidden>
+            <a href="index.html#home">Home</a>
+            <a href="index.html#projects">Projects</a>
+            <a href="about.html#about">About</a>
+            <a href="contact.html#contact">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="playground-message" id="playground" aria-labelledby="playground-heading">
+            <p class="section-label">(A little space to play)</p>
+            <h1 id="playground-heading">Something fun<br>is on its way.</h1>
+            <p>작은 게임을 준비 중이에요. 다음에 또 놀러 와주세요.</p>
+        </section>
+        <footer class="page-bottom">
+            <span>© 2026 eunseochoi</span>
+            <a href="index.html#home">Back to home ↑</a>
+        </footer>
+    </main>
+    <span class="custom-cursor" id="custom-cursor" aria-hidden="true"></span>
+    <script src="app.js"></script>
+</body>
+</html>
