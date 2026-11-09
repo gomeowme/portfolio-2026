@@ -200,11 +200,15 @@ if (customCursor && window.matchMedia('(hover: hover) and (pointer: fine)').matc
 
 if (motionIntro && imageOrbit && introPhotos.length > 0) {
     let isDragging = false;
+    let dragMoved = false;
+    let pointerStartX = 0;
+    let pointerStartY = 0;
     let previousX = 0;
     let previousY = 0;
     let rotationX = -8;
     let rotationY = -12;
     let previousFrameTime = 0;
+    let expandedPhoto = null;
 
     introPhotos.forEach((photo) => {
         photo.style.transform = `translate(-50%, -50%) rotateY(${Number(photo.dataset.angle)}deg) translateZ(390px)`;
@@ -215,7 +219,7 @@ if (motionIntro && imageOrbit && introPhotos.length > 0) {
     }
 
     function animateOrbit(timestamp) {
-        if (previousFrameTime && !isDragging) {
+        if (previousFrameTime && !isDragging && !expandedPhoto) {
             rotationY += Math.min(timestamp - previousFrameTime, 50) * 0.006;
             renderOrbit();
         }
@@ -230,6 +234,9 @@ if (motionIntro && imageOrbit && introPhotos.length > 0) {
     motionIntro.addEventListener('pointerdown', (event) => {
         if (event.button !== 0) return;
         isDragging = true;
+        dragMoved = false;
+        pointerStartX = event.clientX;
+        pointerStartY = event.clientY;
         previousX = event.clientX;
         previousY = event.clientY;
         motionIntro.classList.add('is-dragging');
@@ -238,6 +245,9 @@ if (motionIntro && imageOrbit && introPhotos.length > 0) {
 
     motionIntro.addEventListener('pointermove', (event) => {
         if (!isDragging) return;
+        if (Math.hypot(event.clientX - pointerStartX, event.clientY - pointerStartY) > 4) {
+            dragMoved = true;
+        }
         rotationY += (event.clientX - previousX) * 0.45;
         rotationX -= (event.clientY - previousY) * 0.3;
         previousX = event.clientX;
@@ -252,4 +262,50 @@ if (motionIntro && imageOrbit && introPhotos.length > 0) {
 
     motionIntro.addEventListener('pointerup', stopDragging);
     motionIntro.addEventListener('pointercancel', stopDragging);
+
+    function setExpandedPhoto(photo) {
+        expandedPhoto?.classList.remove('is-expanded');
+        expandedPhoto?.setAttribute('aria-expanded', 'false');
+        expandedPhoto = photo;
+        if (expandedPhoto) {
+            rotationX = 0;
+            rotationY = -Number(expandedPhoto.dataset.angle);
+            renderOrbit();
+            expandedPhoto.classList.add('is-expanded');
+            expandedPhoto.setAttribute('aria-expanded', 'true');
+        }
+    }
+
+    motionIntro.addEventListener('click', (event) => {
+        const photo = event.target.closest('.intro-photo');
+        if (dragMoved) {
+            dragMoved = false;
+            return;
+        }
+
+        if (!photo) {
+            setExpandedPhoto(null);
+            return;
+        }
+
+        setExpandedPhoto(expandedPhoto === photo ? null : photo);
+    });
+
+    introPhotos.forEach((photo) => {
+        photo.addEventListener('keydown', (event) => {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            event.preventDefault();
+            photo.click();
+        });
+    });
+
+    document.addEventListener('click', (event) => {
+        if (expandedPhoto && !event.target.closest('.intro-photo') && !motionIntro.contains(event.target)) {
+            setExpandedPhoto(null);
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') setExpandedPhoto(null);
+    });
 }
