@@ -205,10 +205,12 @@ if (motionIntro && imageOrbit && introPhotos.length > 0) {
     let pointerStartY = 0;
     let previousX = 0;
     let previousY = 0;
+    let hasPointerCapture = false;
     let rotationX = -8;
     let rotationY = -12;
     let previousFrameTime = 0;
     let expandedPhoto = null;
+    let photoFocus = null;
 
     introPhotos.forEach((photo) => {
         photo.style.transform = `translate(-50%, -50%) rotateY(${Number(photo.dataset.angle)}deg) translateZ(390px)`;
@@ -216,10 +218,14 @@ if (motionIntro && imageOrbit && introPhotos.length > 0) {
 
     function renderOrbit() {
         imageOrbit.style.transform = `translate(-50%, -50%) rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+        introPhotos.forEach((photo) => {
+            photo.style.setProperty('--face-yaw', `${-(rotationY + Number(photo.dataset.angle))}deg`);
+            photo.style.setProperty('--face-pitch', `${-rotationX}deg`);
+        });
     }
 
     function animateOrbit(timestamp) {
-        if (previousFrameTime && !isDragging && !expandedPhoto) {
+        if (previousFrameTime && !isDragging) {
             rotationY += Math.min(timestamp - previousFrameTime, 50) * 0.006;
             renderOrbit();
         }
@@ -239,14 +245,18 @@ if (motionIntro && imageOrbit && introPhotos.length > 0) {
         pointerStartY = event.clientY;
         previousX = event.clientX;
         previousY = event.clientY;
+        hasPointerCapture = false;
         motionIntro.classList.add('is-dragging');
-        if (event.isTrusted) motionIntro.setPointerCapture(event.pointerId);
     });
 
     motionIntro.addEventListener('pointermove', (event) => {
         if (!isDragging) return;
         if (Math.hypot(event.clientX - pointerStartX, event.clientY - pointerStartY) > 4) {
             dragMoved = true;
+            if (event.isTrusted && !hasPointerCapture) {
+                motionIntro.setPointerCapture(event.pointerId);
+                hasPointerCapture = true;
+            }
         }
         rotationY += (event.clientX - previousX) * 0.45;
         rotationX -= (event.clientY - previousY) * 0.3;
@@ -257,6 +267,7 @@ if (motionIntro && imageOrbit && introPhotos.length > 0) {
 
     function stopDragging() {
         isDragging = false;
+        hasPointerCapture = false;
         motionIntro.classList.remove('is-dragging');
     }
 
@@ -264,15 +275,51 @@ if (motionIntro && imageOrbit && introPhotos.length > 0) {
     motionIntro.addEventListener('pointercancel', stopDragging);
 
     function setExpandedPhoto(photo) {
-        expandedPhoto?.classList.remove('is-expanded');
-        expandedPhoto?.setAttribute('aria-expanded', 'false');
+        const previousPhoto = expandedPhoto;
+        previousPhoto?.classList.remove('is-expanded');
+        previousPhoto?.setAttribute('aria-expanded', 'false');
+        photoFocus?.remove();
+        photoFocus = null;
         expandedPhoto = photo;
         if (expandedPhoto) {
-            rotationX = 0;
-            rotationY = -Number(expandedPhoto.dataset.angle);
-            renderOrbit();
             expandedPhoto.classList.add('is-expanded');
             expandedPhoto.setAttribute('aria-expanded', 'true');
+
+            const face = expandedPhoto.querySelector('.photo-face').cloneNode(true);
+            const focusButton = document.createElement('button');
+            focusButton.className = 'photo-focus-card';
+            focusButton.type = 'button';
+            focusButton.setAttribute('aria-label', '확대된 사진 닫기');
+            focusButton.style.width = `${expandedPhoto.offsetWidth}px`;
+            focusButton.style.height = `${expandedPhoto.offsetHeight}px`;
+            const focusScale = Math.min(
+                1.7,
+                (window.innerWidth * 0.82) / expandedPhoto.offsetWidth,
+                (window.innerHeight * 0.78) / expandedPhoto.offsetHeight
+            );
+            focusButton.style.setProperty('--focus-scale', String(focusScale));
+            focusButton.appendChild(face);
+
+            photoFocus = document.createElement('div');
+            photoFocus.className = 'photo-focus';
+            photoFocus.setAttribute('role', 'dialog');
+            photoFocus.setAttribute('aria-modal', 'true');
+            photoFocus.setAttribute('aria-label', expandedPhoto.getAttribute('aria-label'));
+            photoFocus.appendChild(focusButton);
+            photoFocus.addEventListener('click', (event) => {
+                if (event.target === photoFocus) setExpandedPhoto(null);
+            });
+            photoFocus.addEventListener('keydown', (event) => {
+                if (event.key === 'Tab') {
+                    event.preventDefault();
+                    focusButton.focus();
+                }
+            });
+            focusButton.addEventListener('click', () => setExpandedPhoto(null));
+            document.body.appendChild(photoFocus);
+            focusButton.focus({ preventScroll: true });
+        } else {
+            previousPhoto?.focus({ preventScroll: true });
         }
     }
 
@@ -300,7 +347,7 @@ if (motionIntro && imageOrbit && introPhotos.length > 0) {
     });
 
     document.addEventListener('click', (event) => {
-        if (expandedPhoto && !event.target.closest('.intro-photo') && !motionIntro.contains(event.target)) {
+        if (expandedPhoto && !motionIntro.contains(event.target) && !photoFocus?.contains(event.target)) {
             setExpandedPhoto(null);
         }
     });
