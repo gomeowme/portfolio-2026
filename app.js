@@ -1,35 +1,53 @@
-const menuButton = document.getElementById('menu-button');
-const menuPanel = document.getElementById('menu-panel');
+const emailCopyButton = document.getElementById('email-copy-button');
+const copyStatus = document.getElementById('copy-status');
 const motionIntro = document.querySelector('.motion-intro');
 const imageOrbit = document.getElementById('image-orbit');
 const introPhotos = [...document.querySelectorAll('.intro-photo')];
 const customCursor = document.getElementById('custom-cursor');
+let copyStatusTimeout;
 
-function closeMenu() {
-    menuPanel.hidden = true;
-    menuButton.setAttribute('aria-expanded', 'false');
-    menuButton.setAttribute('aria-label', '메뉴 열기');
+function copyTextFallback(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.setAttribute('readonly', '');
+    textArea.style.position = 'fixed';
+    textArea.style.opacity = '0';
+    document.body.appendChild(textArea);
+    try {
+        textArea.select();
+        return document.execCommand('copy');
+    } finally {
+        textArea.remove();
+    }
 }
 
-menuButton.addEventListener('click', () => {
-    const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
-    menuPanel.hidden = isOpen;
-    menuButton.setAttribute('aria-expanded', String(!isOpen));
-    menuButton.setAttribute('aria-label', isOpen ? '메뉴 열기' : '메뉴 닫기');
-});
-
-menuPanel.addEventListener('click', (event) => {
-    if (event.target.closest('a')) closeMenu();
-});
-
-document.addEventListener('click', (event) => {
-    if (!event.target.closest('.menu-button') && !event.target.closest('.menu-panel')) {
-        closeMenu();
+emailCopyButton?.addEventListener('click', async () => {
+    const email = emailCopyButton.dataset.email;
+    try {
+        if (navigator.clipboard?.writeText) {
+            try {
+                await navigator.clipboard.writeText(email);
+            } catch (error) {
+                if (!copyTextFallback(email)) throw error;
+            }
+        } else if (!copyTextFallback(email)) {
+            throw new Error('The browser did not copy the email address.');
+        }
+        clearTimeout(copyStatusTimeout);
+        copyStatus.textContent = 'Copied';
+        copyStatus.classList.add('is-visible');
+        copyStatusTimeout = window.setTimeout(() => {
+            copyStatus.classList.remove('is-visible');
+        }, 500);
+    } catch (error) {
+        console.error('Unable to copy the email address.', error);
+        clearTimeout(copyStatusTimeout);
+        copyStatus.textContent = 'Copy failed';
+        copyStatus.classList.add('is-visible');
+        copyStatusTimeout = window.setTimeout(() => {
+            copyStatus.classList.remove('is-visible');
+        }, 500);
     }
-});
-
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') closeMenu();
 });
 
 function updatePageView({ scroll = true } = {}) {
@@ -62,8 +80,6 @@ function updatePageView({ scroll = true } = {}) {
     } else {
         window.scrollTo(0, 0);
     }
-
-    closeMenu();
 }
 
 window.addEventListener('hashchange', updatePageView);
@@ -76,7 +92,7 @@ cvJumpLink?.addEventListener('click', (event) => {
     if (!target) return;
 
     window.history.pushState(null, '', '#cv');
-    const top = target.getBoundingClientRect().top + window.scrollY - 76;
+    const top = target.getBoundingClientRect().top + window.scrollY - 52;
     window.scrollTo({
         top,
         behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
@@ -175,7 +191,7 @@ if (customCursor && window.matchMedia('(hover: hover) and (pointer: fine)').matc
         customCursor.classList.add('is-visible');
         customCursor.classList.toggle('is-hovering', Boolean(event.target.closest('a, button')));
 
-        const nextHeaderItem = event.target.closest('.site-header a, .menu-button');
+        const nextHeaderItem = event.target.closest('.site-header a, .email-copy-button');
         if (nextHeaderItem !== hoveredHeaderItem) {
             hoveredHeaderItem?.classList.remove('pointer-hover');
             nextHeaderItem?.classList.add('pointer-hover');
@@ -209,25 +225,92 @@ if (motionIntro && imageOrbit && introPhotos.length > 0) {
     let rotationX = -8;
     let rotationY = -12;
     let previousFrameTime = 0;
+    let snapTarget = null;
     let expandedPhoto = null;
     let photoFocus = null;
+    let isHoveringPhoto = false;
+    let carouselSpacing = 190;
+    const isInterestOrbit = motionIntro.classList.contains('about-interests');
+    const carouselStep = 45;
+    const isHomeCarousel = !isInterestOrbit;
 
-    introPhotos.forEach((photo) => {
-        photo.style.transform = `translate(-50%, -50%) rotateY(${Number(photo.dataset.angle)}deg) translateZ(390px)`;
-    });
+    function layoutPhotos() {
+        if (isInterestOrbit) {
+            const orbitRadius = Math.min(motionIntro.clientWidth * 0.235, motionIntro.clientHeight * 0.43, 260);
+            introPhotos.forEach((photo) => {
+                const angle = Number(photo.dataset.angle);
+                const radius = orbitRadius * Number(photo.dataset.radius);
+                photo.style.transform = `translate(-50%, -50%) rotate(${angle}deg) translateY(-${radius}px) rotate(${-angle}deg)`;
+            });
+            return;
+        }
 
-    function renderOrbit() {
-        imageOrbit.style.transform = `translate(-50%, -50%) rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-        introPhotos.forEach((photo) => {
-            photo.style.setProperty('--face-yaw', `${-(rotationY + Number(photo.dataset.angle))}deg`);
-            photo.style.setProperty('--face-pitch', `${-rotationX}deg`);
+        imageOrbit.style.transform = 'translate(-50%, -50%)';
+        carouselSpacing = Math.max(190, ...introPhotos.map((photo) => photo.offsetWidth * 1.1));
+        renderCarousel();
+    }
+
+    function getCarouselDistance(index) {
+        const position = rotationY / carouselStep;
+        const count = introPhotos.length;
+        return ((index - position + count / 2) % count + count) % count - count / 2;
+    }
+
+    function renderCarousel() {
+        introPhotos.forEach((photo, index) => {
+            const distance = getCarouselDistance(index);
+            const absoluteDistance = Math.abs(distance);
+            const scale = Math.max(0.32, 1.08 - absoluteDistance * 0.24);
+            const depth = Math.max(0, 1 - absoluteDistance / 4);
+            photo.style.transform = `translate(-50%, -50%) translate3d(${distance * carouselSpacing}px, 0, ${depth * 60}px) rotateY(${-distance * 15}deg) scale(${scale})`;
+            photo.style.opacity = String(Math.max(0, 1 - absoluteDistance * 0.34));
+            photo.style.pointerEvents = absoluteDistance < 2.5 ? 'auto' : 'none';
+            photo.style.zIndex = String(100 - Math.round(absoluteDistance * 10));
         });
     }
 
+    layoutPhotos();
+    if (isInterestOrbit || isHomeCarousel) window.addEventListener('resize', layoutPhotos);
+
+    function renderOrbit() {
+        if (isInterestOrbit) {
+            imageOrbit.style.transform = `translate(-50%, -50%) rotate(${rotationY}deg)`;
+            return;
+        }
+        renderCarousel();
+    }
+
+    renderOrbit();
+
+    introPhotos.forEach((photo) => {
+        photo.addEventListener('pointerenter', () => {
+            isHoveringPhoto = true;
+        });
+        photo.addEventListener('pointerleave', () => {
+            isHoveringPhoto = false;
+        });
+        photo.addEventListener('focus', () => {
+            isHoveringPhoto = true;
+        });
+        photo.addEventListener('blur', () => {
+            isHoveringPhoto = false;
+        });
+    });
+
     function animateOrbit(timestamp) {
         if (previousFrameTime && !isDragging) {
-            rotationY += Math.min(timestamp - previousFrameTime, 50) * 0.006;
-            renderOrbit();
+            const delta = Math.min(timestamp - previousFrameTime, 50);
+            if (snapTarget !== null) {
+                rotationY += (snapTarget - rotationY) * Math.min(1, delta * 0.012);
+                if (Math.abs(snapTarget - rotationY) < 0.04) {
+                    rotationY = snapTarget;
+                    snapTarget = null;
+                }
+                renderOrbit();
+            } else if (!isHoveringPhoto) {
+                rotationY += delta * (isHomeCarousel ? 0.008 : 0.003);
+                renderOrbit();
+            }
         }
         previousFrameTime = timestamp;
         window.requestAnimationFrame(animateOrbit);
@@ -258,8 +341,8 @@ if (motionIntro && imageOrbit && introPhotos.length > 0) {
                 hasPointerCapture = true;
             }
         }
-        rotationY += (event.clientX - previousX) * 0.45;
-        rotationX -= (event.clientY - previousY) * 0.3;
+        rotationY += (event.clientX - previousX) * (isHomeCarousel ? -0.25 : 0.45);
+        if (isInterestOrbit) rotationX -= (event.clientY - previousY) * 0.3;
         previousX = event.clientX;
         previousY = event.clientY;
         renderOrbit();
@@ -269,6 +352,14 @@ if (motionIntro && imageOrbit && introPhotos.length > 0) {
         isDragging = false;
         hasPointerCapture = false;
         motionIntro.classList.remove('is-dragging');
+        if (isHomeCarousel) {
+            snapTarget = Math.round(rotationY / carouselStep) * carouselStep;
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                rotationY = snapTarget;
+                snapTarget = null;
+                renderCarousel();
+            }
+        }
     }
 
     motionIntro.addEventListener('pointerup', stopDragging);
@@ -333,6 +424,19 @@ if (motionIntro && imageOrbit && introPhotos.length > 0) {
         if (!photo) {
             setExpandedPhoto(null);
             return;
+        }
+
+        if (isHomeCarousel) {
+            const distance = getCarouselDistance(introPhotos.indexOf(photo));
+            if (Math.abs(distance) > 0.18) {
+                snapTarget = rotationY + distance * carouselStep;
+                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                    rotationY = snapTarget;
+                    snapTarget = null;
+                    renderCarousel();
+                }
+                return;
+            }
         }
 
         setExpandedPhoto(expandedPhoto === photo ? null : photo);

@@ -17,19 +17,14 @@
             <a href="about.html#about">About</a>
             <a href="contact.html#contact">Contact</a>
         </nav>
-        <button class="menu-button" id="menu-button" type="button" aria-label="메뉴 열기" aria-controls="menu-panel" aria-expanded="false">
-            <span class="menu-lines" aria-hidden="true"><i></i><i></i></span>
-        </button>
-        <nav class="menu-panel" id="menu-panel" aria-label="전체 메뉴" hidden>
-            <a href="#home">Home</a>
-            <a href="#projects">Projects</a>
-            <a href="about.html#about">About</a>
-            <a href="contact.html#contact">Contact</a>
-        </nav>
+        <div class="email-copy-wrap">
+            <button class="email-copy-button" id="email-copy-button" type="button" data-email="ces20030410@gmail.com" aria-label="ces20030410@gmail.com 복사">ces20030410@gmail.com</button>
+            <span class="copy-status" id="copy-status" aria-live="polite"></span>
+        </div>
     </header>
 
-    <section class="motion-intro" aria-label="드래그하여 회전하는 이미지 인트로">
-        <div class="image-orbit" id="image-orbit" role="group" aria-label="드래그하여 회전하는 프로젝트 이미지 자리">
+    <section class="motion-intro home-hero" aria-label="드래그하여 좌우로 둘러보는 프로젝트 이미지">
+        <div class="image-orbit" id="image-orbit" role="group" aria-label="프로젝트 이미지 캐러셀">
             <figure class="intro-photo photo-one" data-angle="0" role="button" tabindex="0" aria-expanded="false" aria-label="프로젝트 이미지 자리 01, 클릭해 확대"><div class="photo-surface"><span class="photo-face"></span></div></figure>
             <figure class="intro-photo photo-two" data-angle="45" role="button" tabindex="0" aria-expanded="false" aria-label="프로젝트 이미지 자리 02, 클릭해 확대"><div class="photo-surface"><span class="photo-face"></span></div></figure>
             <figure class="intro-photo photo-three" data-angle="90" role="button" tabindex="0" aria-expanded="false" aria-label="프로젝트 이미지 자리 03, 클릭해 확대"><div class="photo-surface"><span class="photo-face"></span></div></figure>
@@ -39,6 +34,7 @@
             <figure class="intro-photo photo-seven" data-angle="270" role="button" tabindex="0" aria-expanded="false" aria-label="프로젝트 이미지 자리 07, 클릭해 확대"><div class="photo-surface"><span class="photo-face"></span></div></figure>
             <figure class="intro-photo photo-eight" data-angle="315" role="button" tabindex="0" aria-expanded="false" aria-label="프로젝트 이미지 자리 08, 클릭해 확대"><div class="photo-surface"><span class="photo-face"></span></div></figure>
         </div>
+        <p class="home-caption">@2026 eunseochoi</p>
     </section>
 
     <main>

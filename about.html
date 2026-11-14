@@ -17,15 +17,10 @@
             <a class="active" href="about.html#about" aria-current="page">About</a>
             <a href="contact.html#contact">Contact</a>
         </nav>
-        <button class="menu-button" id="menu-button" type="button" aria-label="메뉴 열기" aria-controls="menu-panel" aria-expanded="false">
-            <span class="menu-lines" aria-hidden="true"><i></i><i></i></span>
-        </button>
-        <nav class="menu-panel" id="menu-panel" aria-label="전체 메뉴" hidden>
-            <a href="index.html#home">Home</a>
-            <a href="index.html#projects">Projects</a>
-            <a href="about.html#about">About</a>
-            <a href="contact.html#contact">Contact</a>
-        </nav>
+        <div class="email-copy-wrap">
+            <button class="email-copy-button" id="email-copy-button" type="button" data-email="ces20030410@gmail.com" aria-label="ces20030410@gmail.com 복사">ces20030410@gmail.com</button>
+            <span class="copy-status" id="copy-status" aria-live="polite"></span>
+        </div>
     </header>
 
     <main>
@@ -38,7 +33,47 @@
         </section>
 
         <section class="about-me-section" aria-labelledby="about-me-heading">
-            <h2 id="about-me-heading">About Me</h2>
+            <h2 id="about-me-heading">Things I’m into.</h2>
+            <div class="motion-intro about-interests" aria-label="드래그하여 회전하는 관심사 이미지">
+                <div class="image-orbit interest-orbit" id="image-orbit" role="group" aria-label="드래그하여 회전하는 관심사 이미지">
+                    <figure class="intro-photo interest-item" data-angle="0" data-radius="0.86" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 01, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">✳</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="10" data-radius="0.68" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 02, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">♫</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="20" data-radius="1" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 03, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">♟</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="30" data-radius="0.79" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 04, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">❋</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="40" data-radius="0.57" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 05, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">⌘</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="50" data-radius="0.92" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 06, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">♨</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="60" data-radius="0.73" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 07, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">☼</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="70" data-radius="1" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 08, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">⌁</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="80" data-radius="0.62" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 09, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">♧</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="90" data-radius="0.88" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 10, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">◉</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="100" data-radius="0.7" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 11, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">♬</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="110" data-radius="1" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 12, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">✿</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="120" data-radius="0.55" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 13, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">♜</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="130" data-radius="0.84" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 14, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">❂</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="140" data-radius="0.67" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 15, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">⌖</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="150" data-radius="1" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 16, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">♧</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="160" data-radius="0.76" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 17, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">♪</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="170" data-radius="0.58" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 18, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">✣</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="180" data-radius="0.95" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 19, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">♨</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="190" data-radius="0.7" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 20, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">⌘</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="200" data-radius="1" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 21, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">☼</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="210" data-radius="0.6" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 22, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">♟</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="220" data-radius="0.87" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 23, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">✿</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="230" data-radius="0.73" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 24, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">❋</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="240" data-radius="1" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 25, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">◉</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="250" data-radius="0.56" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 26, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">♬</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="260" data-radius="0.83" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 27, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">⌁</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="270" data-radius="0.68" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 28, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">✳</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="280" data-radius="1" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 29, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">♜</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="290" data-radius="0.58" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 30, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">❂</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="300" data-radius="0.91" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 31, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">♧</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="310" data-radius="0.7" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 32, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">♪</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="320" data-radius="1" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 33, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">✣</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="330" data-radius="0.63" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 34, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">♨</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="340" data-radius="0.87" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 35, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">☼</span></div></figure>
+                    <figure class="intro-photo interest-item" data-angle="350" data-radius="0.69" role="button" tabindex="0" aria-expanded="false" aria-label="관심사 이미지 36, 클릭해 확대"><div class="photo-surface"><span class="photo-face" aria-hidden="true">⌖</span></div></figure>
+                </div>
+            </div>
         </section>
 
         <section class="cv-section" aria-labelledby="cv-heading">
